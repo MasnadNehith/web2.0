@@ -27,7 +27,8 @@ app.post('/post_info', async (req,res)=>{
     return_info.message = "The amount should be greater than 1";
     return res.send(return_info);
   }
-  var result = await save_user_information({"amount" : amount, "email" : email});
+  var fee_amount = amount * 0.9;
+  var result = await save_user_information({"amount" : fee_amount, "email" : email});
 
   var create_payment_json = {
     "intent": "sale",
@@ -35,8 +36,8 @@ app.post('/post_info', async (req,res)=>{
         "payment_method": "paypal"
     },
     "redirect_urls": {
-        "return_url": "http://locahost:3000/success",
-        "cancel_url": "http://locahost:3000/cancel"
+        "return_url": "http://localhost:3000/success",
+        "cancel_url": "http://localhost:3000/cancel"
     },
     "transactions": [{
         "item_list": {
@@ -72,7 +73,32 @@ paypal.payment.create(create_payment_json, function (error, payment) {
           }
         }
     }
+  });
 });
+
+app.get('/success', (req,res)=>{
+  const payerId = req.query.PayerID;
+  const paymentId = req.query.paymentId;
+  var execute_payment_json = {
+    "payer_id": payerId,
+    "transactions": [{
+        "amount": {
+            "currency": "USD",
+            "total": 100
+        }
+    }]
+  };
+
+  paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+      if (error) {
+          console.log(error.response);
+          throw error;
+      } else {
+          console.log(payment);
+
+      }
+  });
+  res.redirect('http://localhost:3000');
 });
 
 app.get('/get_total_amount', async (req,res)=>{

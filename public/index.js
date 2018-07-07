@@ -7,6 +7,10 @@ class App extends React.Component{
       'email' : '',
     }
   }
+  async componentDidMount(){
+    const result = await axios.get('/get_total_amount');
+    this.setState({total_amount : result.data["0"].total_amount});
+  }
   onSubmit = async (event) =>{
     event.preventDefault();
     const response = await axios.post('/post_info',{

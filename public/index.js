@@ -21,19 +21,40 @@ class App extends React.Component{
   }
   render(){
     return(
-      <div>
-        <h1> LOTTERY APPLICATION WEB 2.0 </h1>
-        <div>
-          <p> Total lottery amount is {this.state.total_amount}</p>
+      <div className="container">
+            <div className="col-md-12">
+              <div className="card text-center">
+                  <div className="card-header">
+                    <h1>TOTAL WINNING POOL IS </h1>
+                    <div className ="block">
+                        <div className="circle">
+                          <p>${this.state.total_amount}</p>
+                        </div>
+                    </div>
+                  </div>
+                  <div className="card-body">
+                  <form onSubmit={this.onSubmit}>
+                      <div className="form-group">
+                        <label >Email address</label>
+                        <input type="email" className="form-control" placeholder="Enter email"
+                          onChange = {event=> this.setState({email :event.target.value})}
+                        />
+                        <small className="form-text text-muted">Well never share your email with anyone else.</small>
+                      </div>
+                      <div className="form-group">
+                        <label>Amount</label>
+                        <input type="number" className="form-control"  placeholder="Enter Amount"
+                          value={this.state.amount}
+                          onChange={event => this.setState({amount : event.target.value})}
+                        />
+                        <small className="form-text text-muted">Enter the amount you would like to participate with</small>
+                      </div>
+                      <button type="submit" className="btn btn-primary">Submit</button>
+                    </form>
+                  </div>
+              </div>
+            </div>
         </div>
-        <form onSubmit={this.onSubmit}>
-          <input placeholder="amount" value = {this.state.amount}
-            onChange = {event=> this.setState({amount : event.target.value})}/>
-          <input placeholder="email" value = {this.state.email}
-            onChange = {event=> this.setState({email : event.target.value})} />
-          <button type="submit" > Participate </button>
-        </form>
-      </div>
     )
   }
 };
